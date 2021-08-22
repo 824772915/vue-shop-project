@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/logo.png" alt="">
+        <img src="../assets/img/login.png" alt="">
       </div>
       <!-- 表单区域 -->
       <el-form  ref="loginFormRef" label-width="0px" :model="loginForm" :rules="loginFormRules" class="login_from">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import {postLogin} from '../network/login'
 export default {
   data(){
     return {
@@ -61,21 +62,16 @@ export default {
       this.$refs.loginFormRef.validate(async valid=>{
         // console.log(valid);
         if(!valid)return; //!valid => valid = false 等于true就执行下一步
-        // const{data:res}直接解构data赋值给res
-        const {data:res} = await this.$http.post('login',this.loginForm);
-        // 通过res的状态码进行判定 是否登录成功
-        if(res.meta.status !== 200){
-          return  this.$message.error("登录失败");
-        }else{
-          this.$message.success('登录成功');
-          
-        // 1. 将登录成功之后的 token，保存到客户端的 sessionStorage 中
-        //   1.1 项目中出了登录之外的其他API接口，必须在登录之后才能访问
-        //   1.2 将服务器返回的 token 保存在 sessionStorage 中
-        window.sessionStorage.setItem('token', res.data.token)  
-        // 2. 跳转到主页（编程式导航）
-        this.$router.push('/home')
-        }
+        postLogin(this.loginForm.username,this.loginForm.password).then(res=>{
+          console.log(res);
+          if(res.meta.status !== 200){
+            return  this.$message.error("登录失败");
+          }else{
+            this.$message.success('登录成功');
+            window.sessionStorage.setItem('token', res.data.token);
+            this.$router.push('/home'); 
+          }
+        })
       })
     }
   }
@@ -101,7 +97,8 @@ export default {
     .avatar_box{
       height: 130px;
       width: 130px;
-      border-radius: 50%;
+      // border-radius: 50%;
+      border-radius: 5%;
       border: 1px solid #eee; 
       padding: 10px;
       box-shadow: 0 0 10px #ddd;
@@ -113,8 +110,7 @@ export default {
         width: 100%;
         height: 100%;
         background-color: #eee;
-        border-radius: 50%;
-
+        // border-radius: 50%;
       }
     }
   }
