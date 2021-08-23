@@ -324,6 +324,7 @@ export default {
     // deleteUsers(id).then(res =>{
     //     console.log(res);
     // })
+    
 
     }
   }
