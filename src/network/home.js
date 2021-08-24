@@ -86,3 +86,134 @@ export function deleteUsers(id) {
     }
   })
 }
+
+// 权限列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 获取权限列表
+export function getRightsList() {
+  return request({
+    url: '/rights/list',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 1.5.1. 角色列表
+export function getRolesList() {
+  return request({
+    url: '/roles',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 编辑提交角色
+export function putRoles(id,roleName,roleDesc) {
+  return request({
+    method:'put',
+    url: '/roles/'+id+'',
+    params:{
+      
+    },
+    data:{
+      roleName,
+      roleDesc
+    }
+  })
+}
+//添加角色
+export function addRoles(roleName,roleDesc) {
+  return request({
+    method:'post',
+    url: '/roles',
+    params:{
+      
+    },
+    data:{
+      roleName,
+      roleDesc
+    }
+  })
+}
+// 查询角色
+export function getRoles(id) {
+  return request({
+    url: '/roles/'+id+'',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+// 删除角色
+export function deleteRoles(id) {
+  return request({
+    method:"delete",
+    url: '/roles/'+id+'',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 1.5.7. 删除角色指定权限
+export function deleteRolesRights(roleId,rightId) {
+  return request({
+    method:"delete",
+    url: '/roles/'+roleId+'/rights/'+rightId+'',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 1.4.1. 所有权限列表
+export function getRightsTree() {
+  return request({
+    url: '/rights/tree',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+// 1.5.6. 角色授权
+export function allotRights(roleId,rids) {
+  return request({
+    method:'post',
+    url: '/roles/'+roleId+'/rights',
+    params:{
+      
+    },
+    data:{
+      rids
+    }
+  })
+}
+
+// 1.3.7. 分配用户角色
+export function putUsersRole(id,rid) {
+  return request({
+    method:'put',
+    url: '/users/'+id+'/role',
+    params:{
+      
+    },
+    data:{
+      rid
+    }
+  })
+}
+// 权限列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
