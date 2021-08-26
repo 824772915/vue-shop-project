@@ -217,3 +217,34 @@ export function putUsersRole(id,rid) {
   })
 }
 // 权限列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 分类列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//1.6.1. 商品分类数据列表
+export function getCateList(type,pagenum,pagesize) {
+  return request({
+    url: '/categories',
+    params:{
+      type,
+      pagenum,
+      pagesize
+    },
+    data:{
+    }
+  })
+}
+// 1.6.2. 添加分类
+export function postCategories(cat_pid,cat_name,cat_level) {
+  return request({
+    method:'post',
+    url: '/categories',
+    params:{
+      
+    },
+    data:{
+      cat_pid,
+      cat_name,
+      cat_level
+    }
+  })
+}
+// 分类列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
