@@ -27,6 +27,9 @@ body,
 .el-pagination {
   margin-top: 15px;
 }
+.el-cascader-menu {
+  height: 300px;
+}
 
 /*:root -> 获取根元素html*/
 :root {
