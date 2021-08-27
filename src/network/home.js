@@ -262,5 +262,61 @@ export function getAttributes(id,sel) {
     }
   })
 }
+// 1.7.2. 添加动态参数或者静态属性
+export function postAttributes(id,attr_name,attr_sel,attr_vals) {
+  return request({
+    method:'post',
+    url: '/categories/'+id+'/attributes',
+    params:{
+      
+    },
+    data:{
+      attr_name,
+      attr_sel,
+      attr_vals
+    }
+  })
+}
+// 1.7.3. 删除参数
+export function deleteAttributes(id,attrid) {
+  return request({
+    method:"delete",
+    url: '/categories/'+id+'/attributes/'+attrid+'',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 1.7.4. 根据 ID 查询参数
+export function getQueryAttributes(id,attrId,attr_sel,attr_vals) {
+  return request({
+    url: '/categories/'+id+'/attributes/'+attrId+'',
+    params:{
+      attr_sel,
+      attr_vals
+    },
+    data:{
+    }
+  })
+}
+// 1.7.5. 编辑提交参数
+export function putAttributes(id,attrId,attr_name,attr_sel,attr_vals) {
+  return request({
+    method:'put',
+    url: '/categories/'+id+'/attributes/'+attrId+'',
+    params:{
+      
+    },
+    data:{
+      attr_name,
+      attr_sel,
+      attr_vals
+    }
+  })
+}
+
 
 // 参数列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

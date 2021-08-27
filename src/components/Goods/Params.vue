@@ -86,6 +86,7 @@
                 <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.attr_id)">编辑</el-button>
                 <el-button size="mini" type="danger" icon="el-icon-delete" @click="removeParams(scope.row.attr_id)">删除</el-button>
               </template>
+              
             </el-table-column>
           </el-table>
         </el-tab-pane>
@@ -123,7 +124,7 @@
 </template>
 
 <script>
-import {getCateList,getAttributes} from '../../network/home';
+import {getCateList,getAttributes,postAttributes,getQueryAttributes,putAttributes,deleteAttributes} from '../../network/home';
 export default {
   data() {
     return {
@@ -187,7 +188,7 @@ export default {
     },
     // tab 页签点击事件的处理函数
     handleTabClick() {
-      console.log(this.activeName)
+      // console.log(this.activeName)
       this.getParamsData()
     },
     // 获取参数的列表数据
@@ -199,21 +200,21 @@ export default {
         this.onlyTableData = []
         return
       }
-
       // 证明选中的是三级分类
-      console.log(this.selectedCateKeys)
+      // console.log(this.selectedCateKeys)
       // 根据所选分类的Id，和当前所处的面板，获取对应的参数
       getAttributes(this.cateId,this.activeName).then(res =>{
           if (res.meta.status !== 200) {
              return this.$message.error('获取参数列表失败！')
           }else{
+            // 将字符串遍历分割变成数组
               res.data.forEach(item => {
                 item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
                 // 控制文本框的显示与隐藏
                 item.inputVisible = false
                 // 文本框中输入的值
                 item.inputValue = ''
-                console.log(res.data)
+                // console.log(res.data)
                 if (this.activeName === 'many') {
                   this.manyTableData = res.data
                 } else {
@@ -229,41 +230,31 @@ export default {
     },
     // 点击按钮，添加参数
     addParams() {
-      this.$refs.addFormRef.validate(async valid => {
+      this.$refs.addFormRef.validate(valid => {
         if (!valid) return
-        const { data: res } = await this.$http.post(
-          `categories/${this.cateId}/attributes`,
-          {
-            attr_name: this.addForm.attr_name,
-            attr_sel: this.activeName
-          }
-        )
-
-        if (res.meta.status !== 201) {
-          return this.$message.error('添加参数失败！')
-        }
-
-        this.$message.success('添加参数成功！')
-        this.addDialogVisible = false
-        this.getParamsData()
+        postAttributes(this.cateId,this.addForm.attr_name,this.activeName).then(res =>{
+           if (res.meta.status !== 201) {
+             return this.$message.error('添加参数失败！')
+           }else{
+             this.$message.success('添加参数成功！')
+             this.addDialogVisible = false
+             this.getParamsData()
+           }
+        })
       })
     },
     // 点击按钮，展示修改的对话框
     async showEditDialog(attr_id) {
       // 查询当前参数的信息
-      const { data: res } = await this.$http.get(
-        `categories/${this.cateId}/attributes/${attr_id}`,
-        {
-          params: { attr_sel: this.activeName }
+      getQueryAttributes(this.cateId,attr_id,this.activeName).then(res =>{
+        console.log(res);
+        if (res.meta.status !== 200) {
+          return this.$message.error('获取参数信息失败！')
+        }else{
+          this.editForm = res.data
+          this.editDialogVisible = true
         }
-      )
-
-      if (res.meta.status !== 200) {
-        return this.$message.error('获取参数信息失败！')
-      }
-
-      this.editForm = res.data
-      this.editDialogVisible = true
+      })
     },
     // 重置修改的表单
     editDialogClosed() {
@@ -271,20 +262,17 @@ export default {
     },
     // 点击按钮，修改参数信息
     editParams() {
-      this.$refs.editFormRef.validate(async valid => {
+      this.$refs.editFormRef.validate(valid => {
         if (!valid) return
-        const { data: res } = await this.$http.put(
-          `categories/${this.cateId}/attributes/${this.editForm.attr_id}`,
-          { attr_name: this.editForm.attr_name, attr_sel: this.activeName }
-        )
-
-        if (res.meta.status !== 200) {
-          return this.$message.error('修改参数失败！')
-        }
-
-        this.$message.success('修改参数成功！')
-        this.getParamsData()
-        this.editDialogVisible = false
+        putAttributes(this.cateId,this.editForm.attr_id,this.editForm.attr_name,this.activeName).then(res =>{
+          if (res.meta.status !== 200) {
+            return this.$message.error('修改参数失败！')
+          }else{
+            this.$message.success('修改参数成功！')
+            this.getParamsData()
+            this.editDialogVisible = false
+          }
+        })
       })
     },
     // 根据Id删除对应的参数项
@@ -303,21 +291,18 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除！')
       }
-
       // 删除的业务逻辑
-      const { data: res } = await this.$http.delete(
-        `categories/${this.cateId}/attributes/${attr_id}`
-      )
-
-      if (res.meta.status !== 200) {
-        return this.$message.error('删除参数失败！')
-      }
-
-      this.$message.success('删除参数成功！')
-      this.getParamsData()
+      deleteAttributes(this.cateId,attr_id).then(res =>{
+        if (res.meta.status !== 200) {
+          return this.$message.error('删除参数失败！')
+        }else{     
+          this.$message.success('删除参数成功！')
+          this.getParamsData()
+        }
+      })
     },
     // 文本框失去焦点，或摁下了 Enter 都会触发
-    async handleInputConfirm(row) {
+     handleInputConfirm(row) {
       if (row.inputValue.trim().length === 0) {
         row.inputValue = ''
         row.inputVisible = false
@@ -331,31 +316,29 @@ export default {
       this.saveAttrVals(row)
     },
     // 将对 attr_vals 的操作，保存到数据库
-    async saveAttrVals(row) {
+    saveAttrVals(row) {
       // 需要发起请求，保存这次操作
-      const { data: res } = await this.$http.put(
-        `categories/${this.cateId}/attributes/${row.attr_id}`,
-        {
-          attr_name: row.attr_name,
-          attr_sel: row.attr_sel,
-          attr_vals: row.attr_vals.join(' ')
+      // 应为传递的是字符串 使用join拼接空字符串使得 数组变成字符串
+      const attr_vals = row.attr_vals.join(' ');
+      putAttributes(this.cateId,row.attr_id,row.attr_name,row.attr_sel,attr_vals).then(res =>{
+        if (res.meta.status !== 200) {
+          return this.$message.error('修改参数项失败！')
+        }else{
+          this.$message.success('修改参数项成功！')
         }
-      )
-
-      if (res.meta.status !== 200) {
-        return this.$message.error('修改参数项失败！')
-      }
-
-      this.$message.success('修改参数项成功！')
+      })   
     },
     // 点击按钮，展示文本输入框
     showInput(row) {
       row.inputVisible = true
       // 让文本框自动获得焦点
       // $nextTick 方法的作用，就是当页面上元素被重新渲染之后，才会指定回调函数中的代码
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
+    // console.log(this.$refs.saveTagInput);
+     if (this.$refs.saveTagInput){
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus()
+        })
+      }
     },
     // 删除对应的参数可选项
     handleClose(i, row) {
