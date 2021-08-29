@@ -1,6 +1,7 @@
 @import "./normalize.css";
 
 /* 全局样式表 */
+/* element */
 html,
 body,
 #app {
@@ -30,6 +31,16 @@ body,
 .el-cascader-menu {
   height: 300px;
 }
+.el-steps{
+  margin: 15px;
+}
+.el-step_title{
+  font-size: 13px;
+}
+.ql-editor{
+  min-height: 300px;
+}
+/* element */
 
 /*:root -> 获取根元素html*/
 :root {

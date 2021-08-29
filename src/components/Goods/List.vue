@@ -28,6 +28,7 @@
         <el-table-column label="商品重量" prop="goods_weight" width="70px"></el-table-column>
         <el-table-column label="创建时间" prop="add_time" width="140px">
           <template slot-scope="scope">
+            <!-- main.js中定义全局过滤恶 或者直接定义工具类进行过滤 -->
             {{scope.row.add_time | dateFormat}}
           </template>
         </el-table-column>
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+import {getGoodsList,deleteGoods} from '../../network/home';
 export default {
   data() {
     return {
@@ -67,28 +69,29 @@ export default {
   },
   methods: {
     // 根据分页获取对应的商品列表
-    async getGoodsList() {
-      const { data: res } = await this.$http.get('goods', {
-        params: this.queryInfo
+    getGoodsList() {
+      getGoodsList(this.queryInfo.query,this.queryInfo.pagenum,this.queryInfo.pagesize).then(res =>{
+        if (res.meta.status !== 200) {
+          return this.$message.error('获取商品列表失败！')
+        }else{
+          this.$message.success('获取商品列表成功！')
+          console.log(res.data)
+          this.goodslist = res.data.goods
+          this.total = res.data.total
+        }
       })
-
-      if (res.meta.status !== 200) {
-        return this.$message.error('获取商品列表失败！')
-      }
-
-      this.$message.success('获取商品列表成功！')
-      console.log(res.data)
-      this.goodslist = res.data.goods
-      this.total = res.data.total
     },
+    // 当每页数量改变时
     handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize
       this.getGoodsList()
     },
+    // 当页数改变时
     handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getGoodsList()
     },
+    // 删除商品
     async removeById(id) {
       const confirmResult = await this.$confirm(
         '此操作将永久删除该商品, 是否继续?',
@@ -103,17 +106,18 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已经取消删除！')
       }
-
-      const { data: res } = await this.$http.delete(`goods/${id}`)
-
-      if (res.meta.status !== 200) {
-        return this.$message.error('删除失败！')
-      }
-
-      this.$message.success('删除成功！')
-      this.getGoodsList()
+      deleteGoods(id).then(res =>{
+        if (res.meta.status !== 200) {
+          return this.$message.error('删除失败！')
+        }else{
+          this.$message.success('删除成功！')
+          this.getGoodsList()
+        }
+      })
     },
+    // 跳转到添加商品对应页数
     goAddpage() {
+      // 路由跳转
       this.$router.push('/goods/add')
     }
   }

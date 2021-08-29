@@ -247,6 +247,8 @@ export function postCategories(cat_pid,cat_name,cat_level) {
     }
   })
 }
+
+
 // 分类列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -320,3 +322,54 @@ export function putAttributes(id,attrId,attr_name,attr_sel,attr_vals) {
 
 
 // 参数列表请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 商品管理请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// 1.8.1. 商品列表数据
+export function getGoodsList(query,pagenum,pagesize) {
+  return request({
+    url: '/goods',
+    params:{
+      query,
+      pagenum,
+      pagesize
+    },
+    data:{
+    }
+  })
+}
+// 1.8.5. 删除商品
+export function deleteGoods(id) {
+  return request({
+    method:"delete",
+    url: `/goods/${id}`,
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+
+// 1.8.2. 添加商品
+export function postGoods({goods_name,goods_cat,goods_price,goods_number,goods_weight,goods_introduce,pics,attrs}) {
+  // goods_name,goods_cat,goods_price,goods_number,goods_weight,goods_introduce,pics,attrs
+  return request({
+    method:'post',
+    url: '/goods',
+    params:{
+      
+    },
+    data:{
+      goods_name,
+      goods_cat,
+      goods_price,
+      goods_number,
+      goods_weight,
+      goods_introduce,
+      pics,attrs
+    }
+  })
+}
+// 商品管理请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
