@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import './plugins/element.js'
+// import './plugins/element.js'
+
 // 导入全局样式
 import './assets/css/base.css';
 import './assets/css/normalize.css';
@@ -15,10 +16,10 @@ import TreeTable from 'vue-table-with-tree-grid';
 
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor'
-// 富文本编辑器对应样式
-import 'quill/dist/quill.core.css' // import styles
-import 'quill/dist/quill.snow.css' // for snow theme
-import 'quill/dist/quill.bubble.css' // for bubble theme
+// require styles 导入富文本编辑器对应的样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 
 //导入axios
