@@ -373,3 +373,50 @@ export function postGoods({goods_name,goods_cat,goods_price,goods_number,goods_w
   })
 }
 // 商品管理请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//订单管理请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 1.10.1. 订单数据列表
+export function getOrdersList({query,pagenum,pagesize,user_id,pay_status,is_send,order_fapiao_title,order_fapiao_company,order_fapiao_content,consignee_addr}) {
+  return request({
+    url: '/orders',
+    params:{
+      query,
+      pagenum,
+      pagesize,
+      user_id,
+      pay_status,
+      is_send,
+      order_fapiao_title,
+      order_fapiao_company,
+      order_fapiao_content,
+      consignee_addr
+    },
+    data:{
+    }
+  })
+}
+// 1.10.5. 查看物流信息
+export function getKuaiDi() {
+  return request({
+    url: '/kuaidi/804909574412544580',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
+//订单管理请求~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 1.11.1.  基于时间统计的折线图
+export function getReports() {
+  return request({
+    url: '/reports/type/1',
+    params:{
+      
+    },
+    data:{
+    }
+  })
+}
